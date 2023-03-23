@@ -15,7 +15,8 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const todo = new Todo({
-        title: req.body.title
+        title: req.body.title,
+        description: req.body.description
     });
     try {
         const newTodo = await todo.save();
@@ -36,5 +37,17 @@ router.patch('/:id', async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 });
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    console.log('delete todo with id: ' + id);
+    try {
+        const todoDelete = await Todo.findByIdAndDelete(id);
+        console.log(todoDelete);
+        res.status(201).json(todoDelete)
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+})
 
 module.exports = router;
